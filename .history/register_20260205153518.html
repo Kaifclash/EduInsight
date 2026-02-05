@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduInsight | Admin Register</title>
+
+  <style>
+    :root{
+      --bg:#070b1a;
+      --card:#0f1736;
+      --card2:#0b122a;
+      --text:#e9eeff;
+      --muted:#a9b2d6;
+      --accent:#7c5cff;
+      --accent2:#00d4ff;
+      --good:#2dff9a;
+      --danger:#ff4d6d;
+      --border:rgba(255,255,255,.12);
+      --shadow: 0 20px 70px rgba(0,0,0,.45);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(124,92,255,.25), transparent 55%),
+        radial-gradient(900px 500px at 85% 20%, rgba(0,212,255,.20), transparent 55%),
+        radial-gradient(900px 600px at 50% 110%, rgba(45,255,154,.12), transparent 60%),
+        linear-gradient(180deg, #060816 0%, var(--bg) 55%, #040514 100%);
+      min-height:100vh;
+      overflow-x:hidden;
+      display:grid;
+      place-items:center;
+      padding:24px 0;
+    }
+
+    a{color:inherit; text-decoration:none;}
+    .wrap{width:min(1100px, 92%);}
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      letter-spacing:.3px;
+    }
+    .logo{
+      width:40px; height:40px;
+      border-radius:12px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 45%),
+        linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 10px 30px rgba(124,92,255,.25);
+    }
+    .brand small{
+      display:block;
+      font-weight:650;
+      color:var(--muted);
+      letter-spacing:0;
+      margin-top:2px;
+      font-size:12px;
+    }
+
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.18s ease;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.10);}
+    .btn-primary{
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 18px 50px rgba(124,92,255,.25);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .panel{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* Left info */
+    .info{
+      padding:22px;
+      background:
+        radial-gradient(700px 220px at 20% 10%, rgba(124,92,255,.22), transparent 60%),
+        radial-gradient(700px 220px at 80% 30%, rgba(0,212,255,.18), transparent 60%),
+        rgba(255,255,255,.03);
+    }
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      color:var(--muted);
+      background: rgba(255,255,255,.05);
+      font-weight:800;
+      font-size:13px;
+      width:fit-content;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: var(--good);
+      box-shadow: 0 0 20px rgba(45,255,154,.5);
+    }
+    h1{
+      margin:14px 0 10px;
+      font-size: clamp(26px, 3.2vw, 40px);
+      line-height:1.08;
+      letter-spacing:-.6px;
+    }
+    .lead{
+      margin:0 0 14px;
+      color:var(--muted);
+      line-height:1.65;
+      font-weight:650;
+      font-size:14px;
+    }
+    .steps{
+      margin-top:14px;
+      display:grid;
+      gap:10px;
+    }
+    .step{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+      padding:12px;
+      border:1px solid var(--border);
+      background: rgba(11,18,42,.35);
+      border-radius: 16px;
+    }
+    .num{
+      width:32px; height:32px;
+      border-radius: 12px;
+      display:grid; place-items:center;
+      font-weight:900;
+      background: rgba(124,92,255,.14);
+      border:1px solid rgba(124,92,255,.25);
+      flex: 0 0 auto;
+    }
+    .step b{display:block; font-size:14px; margin-bottom:4px;}
+    .step span{color:var(--muted); font-weight:650; font-size:13px; line-height:1.45;}
+
+    /* Right form */
+    .form{
+      padding:22px;
+      background: rgba(255,255,255,.03);
+    }
+    .title{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      padding-bottom:12px;
+      border-bottom:1px solid var(--border);
+      margin-bottom:14px;
+    }
+    .title h2{margin:0; font-size:18px;}
+    .title p{margin:0; color:var(--muted); font-weight:700; font-size:13px;}
+
+    form{display:grid; gap:12px;}
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    label{
+      display:block;
+      font-weight:800;
+      font-size:13px;
+      margin-bottom:6px;
+      color: #d9e2ff;
+    }
+    .field{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      border-radius: 14px;
+      padding:10px 12px;
+      transition:.18s ease;
+      position:relative;
+    }
+    .field:focus-within{
+      border-color: rgba(0,212,255,.55);
+      box-shadow: 0 0 0 4px rgba(0,212,255,.10);
+    }
+    input{
+      width:100%;
+      border:none;
+      outline:none;
+      background:transparent;
+      color:var(--text);
+      font-size:14px;
+      font-weight:700;
+      padding:2px 0;
+    }
+    input::placeholder{color: rgba(169,178,214,.65); font-weight:650;}
+    .hint{
+      margin-top:6px;
+      color: var(--muted);
+      font-size:12px;
+      font-weight:650;
+      line-height:1.35;
+    }
+
+    .error{
+      display:none;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,77,109,.35);
+      background: rgba(255,77,109,.10);
+      color: #ffd1d9;
+      font-weight:800;
+      font-size:13px;
+      line-height:1.45;
+    }
+    .success{
+      display:none;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(45,255,154,.30);
+      background: rgba(45,255,154,.10);
+      color: #d6ffe9;
+      font-weight:850;
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .pw-row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+
+    .pw-meter{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      margin-top:6px;
+    }
+    .meter{
+      flex:1;
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid var(--border);
+      overflow:hidden;
+    }
+    .meter > span{
+      display:block;
+      height:100%;
+      width:10%;
+      border-radius:999px;
+      background: linear-gradient(90deg, var(--danger), #ffcf5a, var(--good));
+      transition: width .2s ease;
+    }
+    .meter-text{
+      color: var(--muted);
+      font-weight:850;
+      font-size:12px;
+      min-width: 74px;
+      text-align:right;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:6px;
+    }
+    .actions .left{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .checkbox{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      color: var(--muted);
+      font-weight:700;
+      font-size:12px;
+      line-height:1.4;
+      user-select:none;
+    }
+    .checkbox input{width:16px; height:16px; margin-top:2px;}
+
+    .small-link{
+      color: var(--muted);
+      font-weight:800;
+      font-size:13px;
+    }
+    .small-link:hover{color:var(--text);}
+
+    .footer-note{
+      margin-top:12px;
+      color: var(--muted);
+      font-weight:650;
+      font-size:12px;
+      line-height:1.5;
+      border-top:1px solid var(--border);
+      padding-top:12px;
+    }
+
+    /* Floating glow */
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto auto;
+      width:220px; height:220px;
+      background: radial-gradient(circle at 30% 30%, rgba(0,212,255,.25), transparent 55%);
+      filter: blur(1px);
+      pointer-events:none;
+    }
+
+    /* Responsive */
+    @media (max-width: 950px){
+      .grid{grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px){
+      .row, .pw-row{grid-template-columns:1fr;}
+      .actions{flex-direction:column; align-items:stretch;}
+      .actions .left{justify-content:space-between;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          EduInsight
+          <small>Admin Registration • First-time setup</small>
+        </div>
+      </div>
+      <a class="btn" href="index.html">← Back to Home</a>
+    </div>
+
+    <div class="grid">
+      <!-- Left -->
+      <section class="panel info">
+        <div class="badge"><span class="dot"></span> One Admin • One Institute • Secure Setup</div>
+        <h1>Register your institute admin to start EduInsight.</h1>
+        <p class="lead">
+          This registration is only for the institute’s first admin. After login, you can add teachers and students
+          from the dashboard.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="num">1</div>
+            <div>
+              <b>Create Admin Account</b>
+              <span>Register admin details and institute name for first-time setup.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">2</div>
+            <div>
+              <b>Login & Setup</b>
+              <span>Add classes, subjects, students, and teachers (optional) from admin panel.</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">3</div>
+            <div>
+              <b>Analyze Results</b>
+              <span>Enter marks and instantly view grades, ranks, weak subjects and charts.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right -->
+      <section class="panel form">
+        <div class="title">
+          <div>
+            <h2>Create Admin Account</h2>
+            <p>All fields are required</p>
+          </div>
+          <a class="small-link" href="login.html">Already registered? Login</a>
+        </div>
+
+        <div class="error" id="errBox"></div>
+        <div class="success" id="okBox"></div>
+
+        <form id="regForm" action="register.php" method="POST" novalidate>
+          <div class="row">
+            <div>
+              <label for="adminName">Admin Full Name</label>
+              <div class="field">
+                <input id="adminName" name="full_name" type="text" placeholder="e.g., Kaif Anwar" autocomplete="name" />
+              </div>
+              <div class="hint">This will appear on the dashboard as the account owner.</div>
+            </div>
+
+            <div>
+              <label for="institute">Institute Name</label>
+              <div class="field">
+                <input id="institute" name="institute_name" type="text" placeholder="e.g., ABC College" />
+              </div>
+              <div class="hint">Your institute/organization display name.</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="email">Official Email</label>
+              <div class="field">
+                <input id="email" name="email" type="email" placeholder="admin@college.com" autocomplete="email" />
+              </div>
+              <div class="hint">Use a valid email (later we can add OTP verification).</div>
+            </div>
+
+            <div>
+              <label for="phone">Mobile Number</label>
+              <div class="field">
+                <input id="phone" name="phone" type="tel" placeholder="10-digit mobile number" inputmode="numeric" />
+              </div>
+              <div class="hint">For recovery & security alerts.</div>
+            </div>
+          </div>
+
+          <div class="pw-row">
+            <div>
+              <label for="password">Password</label>
+              <div class="field">
+                <input id="password" type="password" placeholder="Create a strong password" autocomplete="new-password" />
+              </div>
+
+              <div class="pw-meter">
+                <div class="meter"><span id="meterBar" style="width:10%"></span></div>
+                <div class="meter-text" id="meterText">Weak</div>
+              </div>
+              <div class="hint">Use 8+ chars, mix of letters, numbers & symbols.</div>
+            </div>
+
+            <div>
+              <label for="confirm">Confirm Password</label>
+              <div class="field">
+                <input id="confirm" type="password" placeholder="Re-enter password" autocomplete="new-password" />
+              </div>
+              <div class="hint">Must match the password.</div>
+            </div>
+          </div>
+
+          <div class="checkbox">
+            <input id="terms" type="checkbox" />
+            <div>
+              I agree to EduInsight <b>Terms</b> & <b>Privacy Policy</b>. I understand this account is the
+              institute’s primary admin.
+            </div>
+          </div>
+
+          <div class="actions">
+            <div class="left">
+              <button class="btn btn-primary" type="submit">Create Admin</button>
+              <button class="btn" type="button" id="resetBtn">Reset</button>
+            </div>
+            <a class="small-link" href="index.html">Need overview? Go Home</a>
+          </div>
+
+          <div class="footer-note">
+            After registration, you’ll be redirected to login. 
+          </div>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("regForm");
+    const errBox = document.getElementById("errBox");
+    const okBox = document.getElementById("okBox");
+
+    const adminName = document.getElementById("adminName");
+    const institute = document.getElementById("institute");
+    const email = document.getElementById("email");
+    const phone = document.getElementById("phone");
+    const password = document.getElementById("password");
+    const confirm = document.getElementById("confirm");
+    const terms = document.getElementById("terms");
+
+    const meterBar = document.getElementById("meterBar");
+    const meterText = document.getElementById("meterText");
+
+    function showError(msg){
+      okBox.style.display = "none";
+      errBox.style.display = "block";
+      errBox.textContent = msg;
+    }
+    function showSuccess(msg){
+      errBox.style.display = "none";
+      okBox.style.display = "block";
+      okBox.textContent = msg;
+    }
+
+    function isValidEmail(v){
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    }
+    function isValidPhone(v){
+      const digits = v.replace(/\D/g, "");
+      return digits.length === 10;
+    }
+
+    function passwordStrength(p){
+      // simple scoring: length + variety
+      let score = 0;
+      if (p.length >= 8) score++;
+      if (p.length >= 12) score++;
+      if (/[A-Z]/.test(p)) score++;
+      if (/[a-z]/.test(p)) score++;
+      if (/\d/.test(p)) score++;
+      if (/[^A-Za-z0-9]/.test(p)) score++;
+      return score; // 0-6
+    }
+
+    function updateMeter(){
+      const p = password.value.trim();
+      const s = passwordStrength(p);
+      // map score to width
+      const widths = [10, 20, 35, 50, 65, 80, 100];
+      meterBar.style.width = widths[Math.min(s,6)] + "%";
+
+      let label = "Weak";
+      if (s >= 5) label = "Strong";
+      else if (s >= 3) label = "Good";
+      meterText.textContent = label;
+    }
+
+    password.addEventListener("input", updateMeter);
+    updateMeter();
+
+    // keep phone numeric-ish
+    phone.addEventListener("input", () => {
+      phone.value = phone.value.replace(/[^\d\s+-]/g, "");
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      form.reset();
+      errBox.style.display = "none";
+      okBox.style.display = "none";
+      updateMeter();
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const nameV = adminName.value.trim();
+      const instV = institute.value.trim();
+      const emailV = email.value.trim();
+      const phoneV = phone.value.trim();
+      const passV = password.value;
+      const confV = confirm.value;
+
+      if (!nameV) return showError("Please enter Admin Full Name.");
+      if (!instV) return showError("Please enter Institute Name.");
+      if (!emailV || !isValidEmail(emailV)) return showError("Please enter a valid Email address.");
+      if (!phoneV || !isValidPhone(phoneV)) return showError("Please enter a valid 10-digit Mobile Number.");
+      if (!passV || passV.length < 8) return showError("Password must be at least 8 characters long.");
+      if (passV !== confV) return showError("Confirm Password does not match.");
+      if (!terms.checked) return showError("Please accept Terms & Privacy Policy to continue.");
+
+      // Demo success (backend later)
+      showSuccess("Admin account created successfully! Redirecting to login...");
+
+      // In real PHP: submit to register.php, store hashed password, role='admin'
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1100);
+    });
+  </script>
+</body>
+</html>

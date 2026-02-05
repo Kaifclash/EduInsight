@@ -1,0 +1,95 @@
+<script>
+  const form = document.getElementById("regForm");
+  const errBox = document.getElementById("errBox");
+  const okBox = document.getElementById("okBox");
+
+  const adminName = document.getElementById("adminName");
+  const institute = document.getElementById("institute");
+  const email = document.getElementById("email");
+  const phone = document.getElementById("phone");
+  const password = document.getElementById("password");
+  const confirm = document.getElementById("confirm");
+  const terms = document.getElementById("terms");
+
+  const meterBar = document.getElementById("meterBar");
+  const meterText = document.getElementById("meterText");
+
+  function showError(msg){
+    okBox.style.display = "none";
+    errBox.style.display = "block";
+    errBox.textContent = msg;
+  }
+  function showSuccess(msg){
+    errBox.style.display = "none";
+    okBox.style.display = "block";
+    okBox.textContent = msg;
+  }
+
+  function isValidEmail(v){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+  function isValidPhone(v){
+    const digits = v.replace(/\D/g, "");
+    return digits.length === 10;
+  }
+
+  function passwordStrength(p){
+    let score = 0;
+    if (p.length >= 8) score++;
+    if (p.length >= 12) score++;
+    if (/[A-Z]/.test(p)) score++;
+    if (/[a-z]/.test(p)) score++;
+    if (/\d/.test(p)) score++;
+    if (/[^A-Za-z0-9]/.test(p)) score++;
+    return score;
+  }
+
+  function updateMeter(){
+    const p = password.value.trim();
+    const s = passwordStrength(p);
+    const widths = [10, 20, 35, 50, 65, 80, 100];
+    meterBar.style.width = widths[Math.min(s,6)] + "%";
+    let label = "Weak";
+    if (s >= 5) label = "Strong";
+    else if (s >= 3) label = "Good";
+    meterText.textContent = label;
+  }
+
+  password.addEventListener("input", updateMeter);
+  updateMeter();
+
+  phone.addEventListener("input", () => {
+    phone.value = phone.value.replace(/[^\d\s+-]/g, "");
+  });
+
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    form.reset();
+    errBox.style.display = "none";
+    okBox.style.display = "none";
+    updateMeter();
+  });
+
+  // ✅ IMPORTANT: we only preventDefault when validation fails
+  form.addEventListener("submit", (e) => {
+    errBox.style.display = "none";
+    okBox.style.display = "none";
+
+    const nameV = adminName.value.trim();
+    const instV = institute.value.trim();
+    const emailV = email.value.trim();
+    const phoneV = phone.value.trim();
+    const passV = password.value;
+    const confV = confirm.value;
+
+    if (!nameV){ e.preventDefault(); return showError("Please enter Admin Full Name."); }
+    if (!instV){ e.preventDefault(); return showError("Please enter Institute Name."); }
+    if (!emailV || !isValidEmail(emailV)){ e.preventDefault(); return showError("Please enter a valid Email address."); }
+    if (!phoneV || !isValidPhone(phoneV)){ e.preventDefault(); return showError("Please enter a valid 10-digit Mobile Number."); }
+    if (!passV || passV.length < 8){ e.preventDefault(); return showError("Password must be at least 8 characters long."); }
+    if (passV !== confV){ e.preventDefault(); return showError("Confirm Password does not match."); }
+    if (!terms.checked){ e.preventDefault(); return showError("Please accept Terms & Privacy Policy to continue."); }
+
+    // ✅ allow normal submit to register.php
+    showSuccess("Submitting... Please wait.");
+  });
+</script>

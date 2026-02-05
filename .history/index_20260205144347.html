@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduInsight | Student Performance Analytics</title>
+
+  <style>
+    :root{
+      --bg:#070b1a;
+      --card:#0f1736;
+      --card2:#0b122a;
+      --text:#e9eeff;
+      --muted:#a9b2d6;
+      --accent:#7c5cff;
+      --accent2:#00d4ff;
+      --good:#2dff9a;
+      --warn:#ffcf5a;
+      --danger:#ff4d6d;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(124,92,255,.25), transparent 55%),
+        radial-gradient(900px 500px at 80% 20%, rgba(0,212,255,.20), transparent 55%),
+        radial-gradient(900px 600px at 50% 110%, rgba(45,255,154,.12), transparent 60%),
+        linear-gradient(180deg, #060816 0%, var(--bg) 55%, #040514 100%);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+
+    a{color:inherit; text-decoration:none;}
+    .container{width:min(1100px, 92%); margin:0 auto;}
+
+    /* Top Nav */
+    .nav{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter: blur(14px);
+      background: rgba(7,11,26,.55);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 0;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+    .logo{
+      width:38px; height:38px;
+      border-radius:12px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 45%),
+        linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 10px 30px rgba(124,92,255,.25);
+    }
+    .brand small{
+      display:block;
+      font-weight:600;
+      color:var(--muted);
+      letter-spacing:0;
+      margin-top:2px;
+      font-size:12px;
+    }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      color:var(--muted);
+      font-weight:600;
+      font-size:14px;
+    }
+    .nav-links a:hover{color:var(--text);}
+    .nav-actions{display:flex; align-items:center; gap:10px;}
+
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.18s ease;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.10);}
+    .btn-primary{
+      border: none;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 18px 50px rgba(124,92,255,.25);
+    }
+    .btn-primary:hover{filter:brightness(1.05);}
+    .btn-ghost{
+      border:1px solid var(--border);
+      background: transparent;
+    }
+
+    /* Hero */
+    .hero{
+      padding:54px 0 28px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:26px;
+      align-items:center;
+    }
+    .badge{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      color:var(--muted);
+      background: rgba(255,255,255,.05);
+      font-weight:700;
+      font-size:13px;
+      width:fit-content;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: var(--good);
+      box-shadow: 0 0 20px rgba(45,255,154,.5);
+    }
+    h1{
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.05;
+      margin:14px 0 10px;
+      letter-spacing:-.8px;
+    }
+    .lead{
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      margin: 0 0 18px;
+    }
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .mini-stats{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:18px;
+      color: var(--muted);
+      font-weight:700;
+      font-size:13px;
+    }
+    .pill{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      padding:8px 12px;
+      border-radius:999px;
+    }
+
+    /* Right preview card */
+    .preview{
+      position:relative;
+      border-radius: var(--radius);
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      min-height: 340px;
+    }
+    .preview::before{
+      content:"";
+      position:absolute;
+      inset:-60px -60px auto auto;
+      width:220px; height:220px;
+      background: radial-gradient(circle at 30% 30%, rgba(0,212,255,.35), transparent 55%);
+      filter: blur(2px);
+    }
+    .preview-inner{padding:18px;}
+    .preview-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding-bottom:12px;
+      border-bottom:1px solid var(--border);
+      margin-bottom:12px;
+    }
+    .chips{display:flex; gap:8px; flex-wrap:wrap;}
+    .chip{
+      font-size:12px;
+      font-weight:800;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:12px;
+      margin-top:12px;
+    }
+    .kpi{
+      border:1px solid var(--border);
+      border-radius: 16px;
+      padding:12px;
+      background: rgba(11,18,42,.45);
+    }
+    .kpi .label{color:var(--muted); font-weight:800; font-size:12px;}
+    .kpi .value{font-size:22px; font-weight:900; margin-top:6px;}
+    .spark{
+      height:44px;
+      margin-top:10px;
+      border-radius:12px;
+      background:
+        linear-gradient(90deg, rgba(124,92,255,.0), rgba(124,92,255,.28), rgba(0,212,255,.18), rgba(45,255,154,.18), rgba(255,255,255,.0));
+      position:relative;
+      overflow:hidden;
+    }
+    .spark::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      transform: translateX(-60%);
+      animation: shine 2.6s infinite;
+    }
+    @keyframes shine{
+      0%{transform: translateX(-70%);}
+      100%{transform: translateX(70%);}
+    }
+
+    .barlist{
+      margin-top:14px;
+      border-top:1px solid var(--border);
+      padding-top:12px;
+      display:grid;
+      gap:10px;
+    }
+    .bar-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      color:var(--muted);
+      font-weight:800;
+      font-size:12px;
+    }
+    .bar{
+      flex:1;
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      border:1px solid var(--border);
+      margin:0 10px;
+    }
+    .bar > span{
+      display:block;
+      height:100%;
+      width:50%;
+      border-radius:999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+    }
+
+    /* Features */
+    .section{padding: 24px 0 60px;}
+    .section-title{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:14px;
+      margin: 26px 0 14px;
+    }
+    .section-title h2{
+      margin:0;
+      font-size: 22px;
+      letter-spacing: -.2px;
+    }
+    .section-title p{
+      margin:0;
+      color:var(--muted);
+      font-weight:700;
+      font-size:13px;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    .card{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      border-radius: var(--radius);
+      padding:16px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.22);
+      transition:.2s ease;
+    }
+    .card:hover{transform: translateY(-2px); background: rgba(255,255,255,.06);}
+    .icon{
+      width:44px; height:44px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      font-weight:900;
+      background: rgba(124,92,255,.14);
+      border:1px solid rgba(124,92,255,.25);
+      margin-bottom:10px;
+    }
+    .card h3{margin:0 0 6px; font-size:16px;}
+    .card p{margin:0; color:var(--muted); line-height:1.55; font-size:13px; font-weight:650;}
+
+    /* CTA */
+    .cta{
+      margin-top:22px;
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      background:
+        radial-gradient(700px 220px at 20% 10%, rgba(124,92,255,.22), transparent 60%),
+        radial-gradient(700px 220px at 80% 30%, rgba(0,212,255,.18), transparent 60%),
+        rgba(255,255,255,.04);
+      padding:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      box-shadow: var(--shadow);
+    }
+    .cta strong{font-size:16px;}
+    .cta span{display:block; color:var(--muted); font-weight:700; margin-top:6px; font-size:13px;}
+
+    /* Footer */
+    footer{
+      border-top:1px solid var(--border);
+      padding:18px 0;
+      color:var(--muted);
+      font-weight:700;
+      font-size:13px;
+      background: rgba(7,11,26,.45);
+      backdrop-filter: blur(10px);
+    }
+    .foot{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px){
+      .hero-grid{grid-template-columns:1fr; }
+      .preview{min-height: 320px;}
+      .cards{grid-template-columns:1fr;}
+      .nav-links{display:none;}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          EduInsight
+          <small>Student Performance Analytics</small>
+        </div>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#cta">Get Started</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-ghost" href="login.html">Login</a>
+        <a class="btn btn-primary" href="register.html">Create Account</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main class="container hero">
+    <div class="hero-grid">
+      <section>
+        <div class="badge">
+          <span class="dot"></span>
+          Built for Institutes • Teachers • Students
+        </div>
+
+        <h1>
+          Track Performance.<br/>
+          Find Insights.<br/>
+          Improve Results.
+        </h1>
+
+        <p class="lead">
+          EduInsight helps you manage students, record marks, and visualize performance with clean dashboards,
+          leaderboards, and subject-wise analytics — all in one place.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="login.html">Open Dashboard</a>
+          <button class="btn" id="demoBtn">View Demo Stats</button>
+        </div>
+
+        <div class="mini-stats">
+          <div class="pill">✅ Marks Entry</div>
+          <div class="pill">📊 Analytics & Charts</div>
+          <div class="pill">🏆 Rank & Leaderboard</div>
+          <div class="pill">🧾 Reports</div>
+        </div>
+      </section>
+
+      <!-- Preview / Mock Dashboard -->
+      <aside class="preview" aria-label="Dashboard preview">
+        <div class="preview-inner">
+          <div class="preview-top">
+            <div style="font-weight:900;">Dashboard Preview</div>
+            <div class="chips">
+              <div class="chip">Class: TY-BCA</div>
+              <div class="chip">Exam: Mid</div>
+            </div>
+          </div>
+
+          <div class="kpis">
+            <div class="kpi">
+              <div class="label">Average %</div>
+              <div class="value" id="avgVal">78%</div>
+              <div class="spark"></div>
+            </div>
+            <div class="kpi">
+              <div class="label">Pass Rate</div>
+              <div class="value" id="passVal">92%</div>
+              <div class="spark"></div>
+            </div>
+            <div class="kpi">
+              <div class="label">Top Score</div>
+              <div class="value" id="topVal">98%</div>
+              <div class="spark"></div>
+            </div>
+            <div class="kpi">
+              <div class="label">Weak Subject</div>
+              <div class="value" id="weakVal" style="font-size:18px;">Data Structure</div>
+              <div class="spark"></div>
+            </div>
+          </div>
+
+          <div class="barlist">
+            <div class="bar-row">
+              <span>PHP</span>
+              <div class="bar"><span id="b1" style="width:82%"></span></div>
+              <span id="t1">82</span>
+            </div>
+            <div class="bar-row">
+              <span>Java</span>
+              <div class="bar"><span id="b2" style="width:76%"></span></div>
+              <span id="t2">76</span>
+            </div>
+            <div class="bar-row">
+              <span>DS</span>
+              <div class="bar"><span id="b3" style="width:62%"></span></div>
+              <span id="t3">62</span>
+            </div>
+            <div class="bar-row">
+              <span>Web</span>
+              <div class="bar"><span id="b4" style="width:88%"></span></div>
+              <span id="t4">88</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- FEATURES -->
+    <section class="section" id="features">
+      <div class="section-title">
+        <h2>What you can do with EduInsight</h2>
+        <p>Fast • Clean • Accurate analytics</p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="icon">📚</div>
+          <h3>Student & Subject Management</h3>
+          <p>Add students, create subjects, manage classes, and keep everything organized with proper records.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">✍️</div>
+          <h3>Marks Entry with Validations</h3>
+          <p>Enter marks exam-wise and prevent duplicates using smart constraints (one student, one subject, one exam).</p>
+        </div>
+
+        <div class="card">
+          <div class="icon">📈</div>
+          <h3>Insights & Leaderboards</h3>
+          <p>View class toppers, subject-wise averages, weak subjects, grade distribution, and progress trends.</p>
+        </div>
+      </div>
+
+      <div class="section-title" id="how" style="margin-top:22px;">
+        <h2>How it works</h2>
+        <p>Simple 3-step flow</p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="icon">1</div>
+          <h3>Create Class & Subjects</h3>
+          <p>Setup class (FY/SY/TY) and add subjects once. This becomes your base structure.</p>
+        </div>
+        <div class="card">
+          <div class="icon">2</div>
+          <h3>Add Students</h3>
+          <p>Register students with roll number, name, and class mapping for clean reporting.</p>
+        </div>
+        <div class="card">
+          <div class="icon">3</div>
+          <h3>Enter Marks & Analyze</h3>
+          <p>Record marks per exam and instantly see performance, ranks, and charts on dashboard.</p>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta" id="cta">
+        <div>
+          <strong>Ready to start using EduInsight?</strong>
+          <span>Open dashboard or create an admin account to begin setup.</span>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <a class="btn btn-ghost" href="login.html">Login</a>
+          <a class="btn btn-primary" href="register.html">Create Account</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot">
+      <div>© <span id="yr"></span> EduInsight • All rights reserved</div>
+      <div style="display:flex; gap:14px; flex-wrap:wrap;">
+        <a href="#" style="color:var(--muted);">Privacy</a>
+        <a href="#" style="color:var(--muted);">Terms</a>
+        <a href="#" style="color:var(--muted);">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Footer year
+    document.getElementById("yr").textContent = new Date().getFullYear();
+
+    // Demo button changes stats randomly (just for landing page feel)
+    const demoBtn = document.getElementById("demoBtn");
+
+    function rand(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+    demoBtn.addEventListener("click", () => {
+      const avg = rand(65, 92);
+      const pass = rand(70, 99);
+      const top = rand(85, 100);
+
+      const subjects = [
+        {name:"Data Structure", v: rand(45, 78)},
+        {name:"Java", v: rand(55, 90)},
+        {name:"PHP", v: rand(60, 95)},
+        {name:"DBMS", v: rand(50, 88)},
+        {name:"Web Tech", v: rand(60, 96)}
+      ];
+
+      subjects.sort((a,b)=>a.v-b.v);
+      const weak = subjects[0].name;
+
+      document.getElementById("avgVal").textContent = avg + "%";
+      document.getElementById("passVal").textContent = pass + "%";
+      document.getElementById("topVal").textContent = top + "%";
+      document.getElementById("weakVal").textContent = weak;
+
+      // Bars (PHP, Java, DS, Web) - sample mapping
+      const php = rand(55, 95), java = rand(50, 92), ds = rand(40, 85), web = rand(60, 98);
+
+      const setBar = (idBar, idText, value) => {
+        document.getElementById(idBar).style.width = value + "%";
+        document.getElementById(idText).textContent = value;
+      };
+
+      setBar("b1","t1",php);
+      setBar("b2","t2",java);
+      setBar("b3","t3",ds);
+      setBar("b4","t4",web);
+    });
+  </script>
+</body>
+</html>
