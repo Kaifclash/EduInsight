@@ -28,9 +28,7 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
       --shadow: 0 20px 70px rgba(0,0,0,.45);
       --radius:18px;
     }
-
     *{box-sizing:border-box;}
-
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
@@ -42,21 +40,14 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
         linear-gradient(180deg, #060816 0%, var(--bg) 55%, #040514 100%);
       min-height:100vh;
       overflow-x:hidden;
-      overflow-y:auto; /* ✅ important */
     }
-
     a{color:inherit;text-decoration:none;}
-
-    /* ✅ Full width responsive layout */
     .layout{
-      width:100%;
-      max-width:1400px;
-      margin: 16px auto;
-      padding: 0 16px;
+      width:min(1200px, 94%);
+      margin: 18px auto;
       display:grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 270px 1fr;
       gap:16px;
-      align-items:start;
     }
 
     /* Sidebar */
@@ -66,13 +57,11 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
       background: rgba(255,255,255,.04);
       box-shadow: var(--shadow);
       overflow:hidden;
+      position:sticky;
+      top:18px;
+      height: calc(100vh - 36px);
       padding:16px;
-
-      /* ✅ remove fixed height / sticky */
-      position: relative;
-      min-height: calc(100vh - 32px);
     }
-
     .brand{
       display:flex; align-items:center; gap:10px;
       font-weight:900;
@@ -95,7 +84,6 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
       font-size:12px;
       letter-spacing:0;
     }
-
     .nav{
       margin-top:10px;
       display:grid;
@@ -128,7 +116,6 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
       background: rgba(255,255,255,.05);
       color: var(--muted);
     }
-
     .side-footer{
       margin-top:14px;
       border-top:1px solid var(--border);
@@ -147,11 +134,7 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
       box-shadow: var(--shadow);
       overflow:hidden;
       position:relative;
-
-      /* ✅ always fills screen */
-      min-height: calc(100vh - 32px);
     }
-
     .main::before{
       content:"";
       position:absolute;
@@ -175,17 +158,14 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
       top:0;
       z-index:5;
     }
-
     .hello b{font-size:18px;}
     .hello div{color:var(--muted); font-weight:700; font-size:13px; margin-top:4px;}
-
     .actions{
       display:flex;
       gap:10px;
       align-items:center;
       flex-wrap:wrap;
     }
-
     .btn{
       border:1px solid var(--border);
       background: rgba(255,255,255,.06);
@@ -200,7 +180,6 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
       align-items:center;
       justify-content:center;
       user-select:none;
-      white-space:nowrap;
     }
     .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.10);}
     .btn-primary{
@@ -216,13 +195,11 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
 
     /* Content */
     .content{padding:18px;}
-
     .grid{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
       gap:12px;
     }
-
     .card{
       border:1px solid var(--border);
       border-radius: var(--radius);
@@ -287,10 +264,9 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
       line-height:1.5;
     }
 
-    /* ✅ Responsive */
     @media (max-width: 1050px){
       .layout{grid-template-columns: 1fr;}
-      .sidebar{min-height:auto;}
+      .sidebar{position:relative; height:auto;}
       .grid{grid-template-columns: repeat(2, 1fr);}
       .two{grid-template-columns:1fr;}
     }
@@ -316,10 +292,13 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
 
       <div class="nav">
         <a href="admin_dashboard.php">Dashboard <span class="pill">Home</span></a>
-        <a href="classes.php">Manage Classes</a>
+
+        <!-- Next modules (we’ll build one-by-one) -->
+        <a href="#" onclick="return comingSoon('Classes');">Manage Classes <span class="pill">Soon</span></a>
         <a href="#" onclick="return comingSoon('Subjects');">Manage Subjects <span class="pill">Soon</span></a>
         <a href="#" onclick="return comingSoon('Students');">Manage Students <span class="pill">Soon</span></a>
         <a href="#" onclick="return comingSoon('Teachers');">Manage Teachers <span class="pill">Optional</span></a>
+
         <a href="#" onclick="return comingSoon('Exams');">Exams <span class="pill">Soon</span></a>
         <a href="#" onclick="return comingSoon('Marks Entry');">Marks Entry <span class="pill">Soon</span></a>
         <a href="#" onclick="return comingSoon('Analytics');">Analytics <span class="pill">Soon</span></a>
@@ -351,6 +330,7 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
       </div>
 
       <div class="content">
+        <!-- KPI Cards -->
         <div class="grid">
           <div class="card kpi">
             <div class="label">Total Students</div>
@@ -375,10 +355,10 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
         </div>
 
         <div class="note">
-          ✅ Next we will build modules in this order:
-          <b>Classes → Subjects → Students → Exams → Marks Entry → Analytics</b>
+          ✅ Next we will build modules in this order: <b>Classes → Subjects → Students → Exams → Marks Entry → Analytics</b>
         </div>
 
+        <!-- Quick Actions + Recent -->
         <div class="section-title">
           <h2>Quick Actions</h2>
           <p>Start setup in 2 minutes</p>
@@ -422,6 +402,12 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
   </div>
 
   <script>
+    // demo KPIs (until we connect real DB queries)
+    document.getElementById("kStudents").textContent = "0";
+    document.getElementById("kSubjects").textContent = "0";
+    document.getElementById("kExams").textContent = "0";
+    document.getElementById("kAvg").textContent = "—";
+
     function comingSoon(name){
       alert(name + " module next step me banayenge 👍");
       return false;
