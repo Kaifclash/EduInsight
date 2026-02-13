@@ -2,25 +2,22 @@
 session_start();
 require __DIR__ . "/config/db.php";
 
-function back_with_error($msg) {
-    header("Location: login.html?error=" . urlencode($msg));
-    exit;
-}
-
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     header("Location: login.html");
     exit;
 }
 
-$login    = trim($_POST["email"] ?? "");   // email or roll
+$login    = trim($_POST["email"] ?? "");   // field name same rakha (email input), but ab email/roll dono accept
 $password = $_POST["password"] ?? "";
 
 if ($login === "" || $password === "") {
-    back_with_error("Login and Password are required.");
+    die("Login and Password are required.");
 }
 
-$roll = strtoupper(preg_replace('/\s+/', '', $login));
-
+/*
+  If user enters email → match users.email
+  If user enters roll → match students.roll_no (join users)
+*/
 $stmt = $pdo->prepare("
     SELECT u.user_id, u.role, u.full_name, u.password_hash, u.status
     FROM users u
@@ -28,19 +25,19 @@ $stmt = $pdo->prepare("
     WHERE u.email = ? OR s.roll_no = ?
     LIMIT 1
 ");
-$stmt->execute([$login, $roll]);
+$stmt->execute([$login, strtoupper(preg_replace('/\s+/', '', $login))]);
 $user = $stmt->fetch();
 
 if (!$user) {
-    back_with_error("Invalid login or password.");
+    die("Invalid login or password.");
 }
 
 if (($user["status"] ?? "active") !== "active") {
-    back_with_error("Your account is inactive. Contact admin.");
+    die("Your account is inactive. Contact admin.");
 }
 
 if (!password_verify($password, $user["password_hash"])) {
-    back_with_error("Invalid login or password.");
+    die("Invalid login or password.");
 }
 
 // ✅ session

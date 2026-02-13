@@ -318,7 +318,7 @@ $fullName = $_SESSION["full_name"] ?? "Admin";
         <a href="admin_dashboard.php">Dashboard <span class="pill">Home</span></a>
         <a href="classes.php">Manage Classes</a>
         <a href="subjects.php">Manage Subjects</a>
-        <a href="students.php">Manage Students <span class="pill">Open</span></a>        <a href="#" onclick="return comingSoon('Teachers');">Manage Teachers <span class="pill">Optional</span></a>
+<a href="students.php">Manage Students <span class="pill">Open</span></a>        <a href="#" onclick="return comingSoon('Teachers');">Manage Teachers <span class="pill">Optional</span></a>
         <a href="#" onclick="return comingSoon('Exams');">Exams <span class="pill">Soon</span></a>
         <a href="#" onclick="return comingSoon('Marks Entry');">Marks Entry <span class="pill">Soon</span></a>
         <a href="#" onclick="return comingSoon('Analytics');">Analytics <span class="pill">Soon</span></a>

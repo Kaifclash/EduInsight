@@ -19,8 +19,6 @@ if ($login === "" || $password === "") {
     back_with_error("Login and Password are required.");
 }
 
-$roll = strtoupper(preg_replace('/\s+/', '', $login));
-
 $stmt = $pdo->prepare("
     SELECT u.user_id, u.role, u.full_name, u.password_hash, u.status
     FROM users u
@@ -28,7 +26,7 @@ $stmt = $pdo->prepare("
     WHERE u.email = ? OR s.roll_no = ?
     LIMIT 1
 ");
-$stmt->execute([$login, $roll]);
+$stmt->execute([$login, strtoupper(preg_replace('/\s+/', '', $login))]);
 $user = $stmt->fetch();
 
 if (!$user) {
@@ -43,12 +41,12 @@ if (!password_verify($password, $user["password_hash"])) {
     back_with_error("Invalid login or password.");
 }
 
-// ✅ session
+// session
 $_SESSION["user_id"]   = $user["user_id"];
 $_SESSION["role"]      = $user["role"];
 $_SESSION["full_name"] = $user["full_name"];
 
-// ✅ redirect by role
+// redirect
 if ($user["role"] === "admin") {
     header("Location: dashboard/admin_dashboard.php");
 } elseif ($user["role"] === "teacher") {
